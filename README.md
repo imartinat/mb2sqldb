@@ -40,3 +40,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 ```
+
+## Explore and manipulate your data
+
+You can use Prisma studio to access and manipulate the data : https://www.prisma.io/studio or a software like DBeaver to run queries.
