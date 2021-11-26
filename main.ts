@@ -391,17 +391,15 @@ const functionList = [
   importMemberships,
 ];
 
-importDB(functionList)
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+async function main() {
+  await importDB(functionList);
+  console.log("Parents to archive:");
+  await getParentsToArchive();
+}
+
 //importGrades();
 
-console.log("Parents to archive:");
-getParentsToArchive()
+main()
   .catch((e) => {
     throw e;
   })
