@@ -7,11 +7,16 @@
 
 ## How to use it
 
-- git clone https://github.com/imartinat/mb2sqldb
-- cd mb2sqldb
+- run the following commands or download the folder:
+
+```
+git clone https://github.com/imartinat/mb2sqldb
+cd mb2sqldb
+```
+
 - copy env-example to .env
 - edit .env with your ManageBac auth-token
-- In a terminal run the following commands :
+- run the following commands :
 
 ```
 npm run build
