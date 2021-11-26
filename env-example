@@ -1,0 +1,16 @@
+# Environment variables declared in this file are automatically made available to Prisma.
+
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#using-environment-variables
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server and MongoDB (Preview).
+
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+AUTH_TOKEN="MANAGEBAC_AUT_TOKEN"
+MOSYLE_TOKEN="MOSYLE_TOKEN"
+SCHOOL="SCHOOL"
+TEACHER_ID="TEACHER_ID"
+TEACHER_EMAIL="TEACHER_EMAIL"
+TEACHER_LASTNAME="TEACHER_LASTNAME"
+TEACHER_FIRSTNAME="TEACHER_FIRSTNAME"
