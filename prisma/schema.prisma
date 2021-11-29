@@ -50,7 +50,7 @@ model ParentStudentRelationship {
   studentId Int
   parent Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
   parentId Int
-  relationship String
+  relationship String?
 
   @@id([studentId, parentId])
 }
