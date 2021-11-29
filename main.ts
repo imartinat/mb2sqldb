@@ -113,6 +113,7 @@ async function importClasses() {
             id: parseInt(classInfo.id),
             name: classInfo.name,
             start_term_id: classInfo.start_term_id,
+            end_term_id: classInfo.end_term_id,
             teachers: {
               connect: teachers_ids,
             },
@@ -130,23 +131,35 @@ async function importMemberships() {
     if (studentClass.role === "Student") {
       const class_id = studentClass.class_id;
       const student_id = studentClass.user_id;
-      console.log(student_id + "-" + class_id);
+      //console.log(student_id + "-" + class_id);
 
-      try {
-        await prisma.student.update({
-          where: {
-            id: student_id,
-          },
-          data: {
-            classes: {
-              connect: {
-                id: class_id,
+      const studentCount = await prisma.student.count({
+        where: {
+          id: student_id,
+        },
+      });
+      const classCount = await prisma.section.count({
+        where: {
+          id: class_id,
+        },
+      });
+      if (studentCount > 0 && classCount > 0) {
+        try {
+          await prisma.student.update({
+            where: {
+              id: student_id,
+            },
+            data: {
+              classes: {
+                connect: {
+                  id: class_id,
+                },
               },
             },
-          },
-        });
-      } catch (e) {
-        console.error(e);
+          });
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
   }
@@ -343,39 +356,63 @@ async function mapbyGradeLevel() {
 }
 
 async function importGrades() {
+  await prisma.termGrade.deleteMany({});
+  const termId = 108461;
   const classes = await prisma.section.findMany({
     where: {
-      name: {
-        contains: "Art",
-      },
+      AND: [
+        {
+          start_term_id: {
+            lte: termId,
+          },
+        },
+        {
+          end_term_id: {
+            gte: termId,
+          },
+        },
+      ],
     },
   });
+  console.log(classes);
   for (const classInfo of classes) {
     const term_id = classInfo.start_term_id;
     const class_id = classInfo.id;
     const endpoint = `classes/${class_id}/assessments/term/${term_id}/term-grades`;
     const grades = await fetchAll("students", endpoint);
-    console.log(classInfo.name);
+    //console.log(classInfo.name);
     //console.log(grades);
-    console.log(grades.map((g) => console.log(g.term_grade)));
-    console.log("END");
+    //console.log(grades.map((g) => console.log(g.term_grade)));
+    //console.log("END");
     for (const grade of grades) {
-      /*
-      await prisma.student.update({
+      //console.log("Grade:", grade);
+      //console.log("Term Grade:", grade.term_grade);
+      const student = await prisma.student.findFirst({
         where: {
-          id: grade.student_id,
-        },
-        data: {
-          termGrades: {
-            create: {
-              grade: "2",
-              classId: class_id,
-              termId: term_id,
-            },
-          },
+          id: grade.id,
         },
       });
-      */
+      console.log(student);
+      if (student) {
+        await prisma.student.update({
+          where: {
+            id: grade.id,
+          },
+          data: {
+            termGrades: {
+              create: {
+                grade: grade.term_grade.grade,
+                termId: term_id,
+                class: {
+                  connect: {
+                    id: class_id,
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
     }
   }
 }
@@ -384,11 +421,11 @@ async function importGrades() {
 //fetchMosyle("listdevices");
 
 const functionList = [
-  importStudents,
-  importParents,
-  importTeachers,
+  //importStudents,
+  //  importParents,
   importClasses,
-  importMemberships,
+  //  importMemberships,
+  //importGrades,
 ];
 
 async function main() {
