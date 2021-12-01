@@ -11,67 +11,68 @@ datasource db {
 }
 
 model Student {
-  id      Int      @id
-  email   String   @unique
-  archived Boolean
+  id            Int                         @id
+  email         String                      @unique
+  archived      Boolean
   first_name    String
-  last_name    String
-  gender String?
-  birthday String?
-  grade String?
+  last_name     String
+  gender        String?
+  birthday      String?
+  grade         String?
   mb_student_id String?
-  parents ParentStudentRelationship[]
-  classes Section[]
-  termGrades TermGrade[]
+  parents       ParentStudentRelationship[]
+  classes       Section[]
+  termGrades    TermGrade[]
 }
 
 model Teacher {
-  id      Int      @id
-  email   String   @unique
-  first_name    String
-  last_name    String
-  classes Section[]
+  id         Int       @id
+  email      String    @unique
+  first_name String
+  last_name  String
+  classes    Section[]
 }
 
 model Parent {
-  id Int @id
-  email String
+  id           Int                         @id
+  email        String
   phone_number String?
   mobile_phone String?
-  work_phone String?
-  archived Boolean @default(false)
-  first_name String
-  last_name String
-  children ParentStudentRelationship[]
+  work_phone   String?
+  archived     Boolean                     @default(false)
+  first_name   String
+  last_name    String
+  children     ParentStudentRelationship[]
 }
 
 model ParentStudentRelationship {
-  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  studentId Int
-  parent Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
-  parentId Int
+  student      Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId    Int
+  parent       Parent  @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  parentId     Int
   relationship String
 
   @@id([studentId, parentId])
 }
 
-
 model Section {
-  id Int @id
-  name String
+  id            Int         @id
+  name          String
   start_term_id Int
-  teachers Teacher[] 
-  students Student[]
-  termGrades TermGrade[]
+  end_term_id   Int
+  teachers      Teacher[]
+  students      Student[]
+  termGrades    TermGrade[]
 }
 
 model TermGrade {
-  student Student @relation(fields: [studentId], references: [id])
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId Int
-  class Section @relation(fields: [classId], references: [id])
-  classId Int
-  termId Int
-  grade String
+  class     Section @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId   Int
+  termId    Int
+  grade     String?
+  comments  String?
 
   @@id([studentId, classId])
 }

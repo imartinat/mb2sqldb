@@ -168,7 +168,7 @@ async function importMemberships() {
 async function importDB(importFunctions) {
   console.log(importFunctions);
   for (const importFunction of importFunctions) {
-    await importFunction();
+    await importFunction;
   }
 }
 
@@ -355,9 +355,9 @@ async function mapbyGradeLevel() {
   csvStream.end();
 }
 
-async function importGrades() {
+async function importGrades(termId: number) {
   await prisma.termGrade.deleteMany({});
-  const termId = 108461;
+
   const classes = await prisma.section.findMany({
     where: {
       AND: [
@@ -402,6 +402,7 @@ async function importGrades() {
             termGrades: {
               create: {
                 grade: grade.term_grade.grade,
+                comments: grade.term_grade.comments,
                 termId: term_id,
                 class: {
                   connect: {
@@ -420,12 +421,14 @@ async function importGrades() {
 //mapbyGradeLevel();
 //fetchMosyle("listdevices");
 
+const termId = 108461;
 const functionList = [
-  //importStudents,
-  //  importParents,
-  importClasses,
-  //  importMemberships,
-  //importGrades,
+  //importStudents(),
+  //importParents(),
+  //importTeachers(),
+  //importClasses(),
+  //importMemberships(),
+  importGrades(termId),
 ];
 
 async function main() {
