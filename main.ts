@@ -423,11 +423,11 @@ async function importGrades(termId: number) {
 
 const termId = 108461;
 const functionList = [
-  //importStudents(),
-  //importParents(),
-  //importTeachers(),
-  //importClasses(),
-  //importMemberships(),
+  importStudents(),
+  importParents(),
+  importTeachers(),
+  importClasses(),
+  importMemberships(),
   importGrades(termId),
 ];
 
