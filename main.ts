@@ -421,15 +421,16 @@ async function importGrades() {
 //fetchMosyle("listdevices");
 
 const functionList = [
-  //importStudents,
-  //  importParents,
+  importStudents,
+  importParents,
   importClasses,
-  //  importMemberships,
+  importMemberships,
   //importGrades,
 ];
 
 async function main() {
   await importDB(functionList);
+  await mapbyGradeLevel();
   console.log("Parents to archive:");
   await getParentsToArchive();
 }
